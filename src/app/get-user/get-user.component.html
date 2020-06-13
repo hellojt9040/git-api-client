@@ -1,0 +1,113 @@
+<div class="d-flex flex-column">
+  <div class="jumbotron col-md-8 mt-2 mx-auto" style="margin-bottom:0">
+    <div *ngIf="user" class="row">
+      <div class="user-details col-md-9">
+        <div class="user-name">
+          {{user.login}}
+        </div>
+        <hr>
+        <div class="d-flex">
+          <span class="badge badge-primary">
+            {{user.public_repos}} Public Repos
+          </span>
+          <span class="badge badge-dark">
+            {{user.public_gists}} Public Gists
+          </span>
+          <span class="badge badge-success">
+            {{user.followers}} Followers
+          </span>
+          <span class="badge badge-warning">
+            {{user.following}} Following
+          </span>
+        </div>
+        <div class="row mt-2 ">
+          <div class="col-4 p-0">
+            <ul class="list-group list-group-flush">
+              <li *ngIf="user.login" class="list-group-item">User Name</li>
+              <li *ngIf="user.location" class="list-group-item">Location</li>
+              <li *ngIf="user.email" class="list-group-item">Email</li>
+              <li *ngIf="user.blog" class="list-group-item">URL</li>
+              <li *ngIf="user.created_at" class="list-group-item">Member Since:</li>
+            </ul>
+          </div>
+          <div class="col-8 p-0 mb-2">
+            <ul class="list-group list-group-flush">
+              <li *ngIf="user.login" class="list-group-item">{{user.login}}</li>
+              <li *ngIf="user.location" class="list-group-item">{{user.location}}</li>
+              <li *ngIf="user.email" class="list-group-item">{{user.email}}</li>
+              <li *ngIf="user.blog" class="list-group-item">{{user.blog}}</li>
+              <li *ngIf="user.created_at" class="list-group-item">{{user.created_at}}</li>
+            </ul>
+          </div>
+          <div class="mx-auto">
+            <button type="button" class="btn btn-secondary" (click)="showRepo()">
+              <span *ngIf="getRepoloader" class="spinner-border spinner-border-sm m-1"></span>
+              Get Repos
+            </button>
+          </div>
+
+        </div>
+      </div>
+      <div class="profile-pic col-md-3  ">
+          <img src={{user.avatar_url}}
+              alt="profile-pic"
+              style="height: 200px;width: 200px;">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row mt-3">
+    <div class="panel panel-default col-md-8 mx-auto">
+      <div class="panel-heading">
+          <h3 class="panel-title">Repositories</h3>
+      </div>
+      <div class="panel-body">
+          <div class="row">
+              <div class="col-md-12">
+                  <div *ngFor="let repo of copyRepos">
+                      <div class="row">
+                          <div class="col-md-9">
+                              <h4><a href="{{repo.html_url}}" target="_blank">{{repo.name}}</a></h4>
+                              <p>{{repo.description}}</p>
+                              <div class="">
+                                <span class="col-md">Created since: {{repo.created_at}}</span>
+                                <span class="col-md">{{repo.language}}</span>
+                                <span class="col-md">
+                                  <a href="{{'https://github.com/' + user.login + '/' + repo.name + '/archive/master.zip'}}">
+                                    <mat-icon color="primary">get_app</mat-icon>
+                                  </a>
+                                </span>
+                              </div>
+                              <!-- 'https://github.com/' + user.login + '/' + repo.name + '/archive/master.zip' -->
+                          </div>
+                          <div class="col-md-3">
+                              <span class="badge badge-success">
+                                {{repo.watchers}} Watchers
+                              </span>
+                              <span class="badge badge-warning">
+                                {{repo.forks}} Forks
+                              </span>
+
+                              <!-- <span class="label label-default">{{repo.watchers}} Watchers</span>
+                              <span class="label label-primary">{{repo.forks}} Forks</span> -->
+                          </div>
+                      </div>
+                      <hr />
+                  </div>
+              </div>
+          </div>
+      </div>
+      <mat-paginator *ngIf="copyRepos" [length]="user.public_repos"
+                    [pageSize]="repoPerPage"
+                    (page)="onPageChange($event)"
+                    [pageSizeOptions]="[5, 10, 25, 100]">
+      </mat-paginator>
+    </div>
+  </div>
+
+
+</div>
+
+
+
